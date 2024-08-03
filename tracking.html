@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Hand Made</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: "Roboto", sans-serif;
+            background-color: #e47777;
+            
+        }
+
+        h1 {
+            margin: 20px 0;
+            color: #fff;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        form {
+            margin-bottom: 20px;
+           
+            padding: 20px;
+          
+            width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid rgb(228, 170, 170);
+            width: 70%;
+            margin-bottom: 10px;
+            flex-grow: 1;
+            height: 30px;
+            color: green;
+        }
+
+        button {
+            padding: 10px;
+            background: black;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            width: 20%;
+            max-width: 100px;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: black;
+            color: #ee8f22
+        }
+
+        .shipment-details {
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+           color: rgb(0, 0, 0);
+            width: 660px;
+            margin: 0 auto;
+            font-size: large;
+
+        }
+
+        .shipment-details h3, .shipment-details p {
+            margin: 0 0 10px;
+            
+        }
+
+        .countdown {
+            font-size: 18px;
+            color: #ff0000;
+        }
+
+        /* Loader styles */
+        .loader-container {
+            display: none;
+            background-color: #f39c12;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loader {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .spinnerBlock {
+            animation: rotate 600ms linear infinite;
+            transform-origin: center;
+            display: block;
+            height: 50px;
+            width: 50px;
+        }
+
+        .spinnerBlock span {
+            display: block;
+            border: 2px solid #f80707;
+            border-radius: 50%;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .spinnerBlock span:nth-child(1) { border-color: #ffffff; }
+        .spinnerBlock span:nth-child(2) { left: -18px; top: 10px; }
+        .spinnerBlock span:nth-child(3) { left: -18px; top: -10px; }
+        .spinnerBlock span:nth-child(4) { left: 0; top: -18px; }
+        .spinnerBlock span:nth-child(5) { left: 18px; top: -10px; }
+        .spinnerBlock span:nth-child(6) { left: 18px; top: 10px; }
+        .spinnerBlock span:nth-child(7) { left: 0; top: 18px; }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Other existing styles */
+        .status-icons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .status-icons div {
+            text-align: center;
+            flex: 1;
+        }
+
+        .status-icons img {
+            width: 120px;
+            height: 100px;
+        }
+
+        @media (max-width: 1200px) {
+            .status-icons img {
+                width: 100px;
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .status-icons img {
+                width: 80px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .status-icons img {
+                width: 60px;
+                height: 40px;
+            }
+
+            .status-icons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .status-icons div {
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            form, .shipment-details {
+                width: 90%;
+                margin: 0 auto;
+            }
+
+            input, button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        #img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 25vh;
+            margin-left: 90px;
+        }
+
+        #img img {
+            max-width: 40%;
+            height: auto;
+        }
+
+        @media screen and (max-width: 600px) {
+            #img {
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        marquee {
+            font-size: 18px;
+            color: white;
+            background-color: #007BFF;
+            padding: 10px 0;
+            width: 100%;
+            display: block;
+            text-align: center;
+            margin-top: 150px;
+        }
+
+        @media screen and (max-width: 800px) {
+            marquee {
+                font-size: 16px;
+                padding: 8px 0;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            marquee {
+                font-size: 14px;
+                padding: 6px 0;
+            }
+        }
+
+        header {
+            text-align: center;
+            padding: 10px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 20px;
+            margin: 0;
+        }
+
+        header .slogan {
+            font-size: 16px;
+            margin: 1px 0 0;
+            color: #ced4da;
+        }
+
+        @media screen and (max-width: 600px) {
+            header h1 {
+                font-size: 28px;
+            }
+
+            header .slogan {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+  
+    <h1>Track Your Shipment</h1>
+    <form id="trackForm">
+        <input type="text" id="trackingCode" placeholder="Enter your tracking ID 10 Digits">
+        <button type="button" onclick="trackShipment()">Track</button>
+    </form>
+
+    <div id="shipmentDetails" class="shipment-details" style="display:none;">
+        <h3 style="color: #3f0ef0;">Shipment Details</h3>
+        <hr>
+        <p id="Name"></p>
+        <p id="orderID"></p>
+        <p id="trackingID"></p>
+        <p id="serviceHandler"></p>
+        <p id="origin"></p>
+        <p id="destination"></p>
+        <p id="status"></p>
+        <hr>
+        <p id="updateTime"></p>
+        <div class="progress-container">
+            <div class="progress-bar"><span id="progress"></span></div>
+        </div>
+    </div>
+
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+        </div>
+    </div>
+
+    <div id="loaderContainer" class="loader-container">
+        <div class="loader">
+            <div class="spinnerBlock">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p id="countdownMessage" class="countdown">Please wait, we are finding your shipment status...</p>
+        </div>
+    </div>
+
+    <script>
+        async function trackShipment() {
+            const trackingCode = document.getElementById('trackingCode').value;
+            document.getElementById('loaderContainer').style.display = 'flex';
+        
+            try {
+                const response = await fetch('process.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ trackingCode: trackingCode })
+                });
+        
+                const data = await response.json();
+        
+                if (!data) {
+                    showModal();
+                    return;
+                }
+        
+                document.getElementById('shipmentDetails').style.display = 'block';
+                document.getElementById('Name').innerText = `Name: ${data.customerName}`;
+                document.getElementById('orderID').innerText = `Order ID: ${data.orderNumber}`;
+                document.getElementById('trackingID').innerText = `Tracking ID: ${data.trackingCode}`;
+                document.getElementById('serviceHandler').innerText = `Service Handler: ${data.serviceHandler}`;
+                document.getElementById('origin').innerText = `Origin: ${data.origin}`;
+                document.getElementById('destination').innerText = `Destination: ${data.destination}`;
+                document.getElementById('status').innerText = `Status: ${data.status}`;
+                document.getElementById('updateTime').innerText = `Last Updated: ${data.updateTime}`;
+        
+                const status = data.status.toLowerCase();
+                let progress = 0;
+        
+                if (status.includes('processed')) {
+                    progress = 25;
+                }
+                if (status.includes('shipped')) {
+                    progress = 50;
+                }
+                if (status.includes('en route')) {
+                    progress = 75;
+                }
+                if (status.includes('arrived')) {
+                    progress = 100;
+                }
+        
+                document.getElementById('progress').style.width = `${progress}%`;
+        
+            } catch (error) {
+                console.error('Error:', error);
+                showModal();
+            } finally {
+                document.getElementById('loaderContainer').style.display = 'none';
+            }
+        }
+        
+        function showModal() {
+            const modal = document.getElementById('alertModal');
+            const modalMessage = document.getElementById('modalMessage');
+            modalMessage.innerText = 'Tracking number not found!';
+            modal.style.display = 'block';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 2000);
+        }
+        
+    </script>
+</body>
+</html>
